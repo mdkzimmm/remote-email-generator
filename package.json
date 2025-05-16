@@ -1,0 +1,38 @@
+{
+  "name": "remote-email-generator",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src --ext .ts",
+    "cli": "ts-node src/index.ts",
+    "server": "ts-node src/index.ts server"
+  },
+  "keywords": [
+    "email",
+    "outreach",
+    "sales",
+    "automation",
+    "remote"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "Remote.com Email Generator for personalized outreach",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.3",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.15.18",
+    "cors": "^2.8.5",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^16.5.0",
+    "exa-js": "^1.7.2",
+    "express": "^5.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "zod": "^3.24.4"
+  }
+}

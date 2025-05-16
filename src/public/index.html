@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote.com Email Generator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background-color: #5227cc;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+    
+    h2 {
+      color: #5227cc;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+      margin-top: 30px;
+    }
+    
+    .step-container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+    
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    button {
+      background-color: #5227cc;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover {
+      background-color: #3c1c99;
+    }
+    
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    
+    .result-container {
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+    
+    .result-link {
+      display: block;
+      margin-top: 10px;
+      color: #5227cc;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .result-link:hover {
+      text-decoration: underline;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .loading::after {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(82, 39, 204, 0.3);
+      border-radius: 50%;
+      border-top-color: #5227cc;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .persona-tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 5px;
+    }
+    
+    .persona-hr { background-color: #e6f7ff; color: #0070e0; }
+    .persona-talent { background-color: #f0f7ff; color: #2b88d8; }
+    .persona-finance { background-color: #f0fff0; color: #28a745; }
+    .persona-operations { background-color: #fff8e6; color: #f0ad4e; }
+    .persona-executive { background-color: #fff0f5; color: #d63384; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Remote.com Email Generator</h1>
+      <p>Automated Personalized Outreach for Account Executives</p>
+    </div>
+  </header>
+  
+  <div class="container">
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+      <button id="tab-workflow" class="tab-button active">Full Workflow</button>
+      <button id="tab-research" class="tab-button">Research Only</button>
+      <button id="tab-parse" class="tab-button">Parse Brief</button>
+      <button id="tab-emails" class="tab-button">Generate Emails</button>
+    </div>
+    
+    <!-- Full Workflow Tab -->
+    <div id="workflow-tab" class="tab-content">
+      <h2>Complete Email Generation Workflow</h2>
+      <p>Generate personalized email sequences in one workflow from company research to final CSV export.</p>
+      
+      <div class="step-container">
+        <h3>Step 1: Company Information</h3>
+        <div class="form-group">
+          <label for="company-name">Company Name (required)</label>
+          <input type="text" id="company-name" placeholder="e.g., Acme Corporation">
+        </div>
+        
+        <div class="form-group">
+          <label for="company-website">Company Website (optional)</label>
+          <input type="text" id="company-website" placeholder="e.g., https://acme.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="company-linkedin">LinkedIn URL (optional)</label>
+          <input type="text" id="company-linkedin" placeholder="e.g., https://linkedin.com/company/acme">
+        </div>
+        
+        <div class="form-group">
+          <label>Email Options</label>
+          <div>
+            <input type="checkbox" id="include-subjects" checked>
+            <label for="include-subjects" style="display: inline;">Include subject lines</label>
+          </div>
+          <div>
+            <input type="checkbox" id="personalize" checked>
+            <label for="personalize" style="display: inline;">Personalize emails</label>
+          </div>
+          <div>
+            <label for="max-emails" style="display: inline;">Emails per contact:</label>
+            <select id="max-emails">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5" selected>5</option>
+            </select>
+          </div>
+        </div>
+        
+        <button id="start-workflow">Generate Email Sequences</button>
+        
+        <div id="workflow-loading" class="loading hidden">
+          Processing workflow...
+        </div>
+        
+        <div id="workflow-result" class="result-container hidden">
+          <h4>Workflow Results</h4>
+          <p id="workflow-message"></p>
+          <a id="research-download" class="result-link" href="#" target="_blank">Download Research</a>
+          <a id="brief-download" class="result-link" href="#" target="_blank">Download Account Brief</a>
+          <a id="csv-download" class="result-link" href="#" target="_blank">Download Email Sequences (CSV)</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Research Only Tab -->
+    <div id="research-tab" class="tab-content hidden">
+      <h2>Company Research</h2>
+      <p>Research a company using EXA without generating emails.</p>
+      
+      <div class="step-container">
+        <div class="form-group">
+          <label for="research-company-name">Company Name (required)</label>
+          <input type="text" id="research-company-name" placeholder="e.g., Acme Corporation">
+        </div>
+        
+        <div class="form-group">
+          <label for="research-company-website">Company Website (optional)</label>
+          <input type="text" id="research-company-website" placeholder="e.g., https://acme.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="research-company-linkedin">LinkedIn URL (optional)</label>
+          <input type="text" id="research-company-linkedin" placeholder="e.g., https://linkedin.com/company/acme">
+        </div>
+        
+        <button id="start-research">Research Company</button>
+        
+        <div id="research-loading" class="loading hidden">
+          Researching company...
+        </div>
+        
+        <div id="research-result" class="result-container hidden">
+          <h4>Research Results</h4>
+          <p id="research-message"></p>
+          <a id="research-only-download" class="result-link" href="#" target="_blank">Download Research</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Parse Brief Tab -->
+    <div id="parse-tab" class="tab-content hidden">
+      <h2>Parse Account Brief</h2>
+      <p>Upload or paste an existing account brief and parse it into structured data.</p>
+      
+      <div class="step-container">
+        <div class="form-group">
+          <label for="brief-text">Account Brief Text</label>
+          <textarea id="brief-text" rows="10" placeholder="Paste your account brief here..."></textarea>
+        </div>
+        
+        <button id="parse-brief">Parse Brief</button>
+        
+        <div id="parse-loading" class="loading hidden">
+          Parsing brief...
+        </div>
+        
+        <div id="parse-result" class="result-container hidden">
+          <h4>Parsed Brief</h4>
+          <div id="brief-data"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Generate Emails Tab -->
+    <div id="emails-tab" class="tab-content hidden">
+      <h2>Generate Email Sequences</h2>
+      <p>Generate email sequences from an existing account brief.</p>
+      
+      <div class="step-container">
+        <div class="form-group">
+          <label for="emails-brief-text">Account Brief Text</label>
+          <textarea id="emails-brief-text" rows="10" placeholder="Paste your account brief here..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Email Options</label>
+          <div>
+            <input type="checkbox" id="emails-include-subjects" checked>
+            <label for="emails-include-subjects" style="display: inline;">Include subject lines</label>
+          </div>
+          <div>
+            <input type="checkbox" id="emails-personalize" checked>
+            <label for="emails-personalize" style="display: inline;">Personalize emails</label>
+          </div>
+          <div>
+            <label for="emails-max-emails" style="display: inline;">Emails per contact:</label>
+            <select id="emails-max-emails">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5" selected>5</option>
+            </select>
+          </div>
+        </div>
+        
+        <button id="generate-emails">Generate Emails</button>
+        
+        <div id="emails-loading" class="loading hidden">
+          Generating emails...
+        </div>
+        
+        <div id="emails-result" class="result-container hidden">
+          <h4>Email Sequences</h4>
+          <p id="emails-message"></p>
+          <a id="emails-download" class="result-link" href="#" target="_blank">Download Email Sequences (CSV)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Tab Navigation
+    document.getElementById('tab-workflow').addEventListener('click', () => showTab('workflow'));
+    document.getElementById('tab-research').addEventListener('click', () => showTab('research'));
+    document.getElementById('tab-parse').addEventListener('click', () => showTab('parse'));
+    document.getElementById('tab-emails').addEventListener('click', () => showTab('emails'));
+    
+    function showTab(tabName) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+      
+      // Show the selected tab content
+      document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+      
+      // Update active tab button
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
+    
+    // Full Workflow
+    document.getElementById('start-workflow').addEventListener('click', async () => {
+      const companyName = document.getElementById('company-name').value.trim();
+      if (!companyName) {
+        alert('Company name is required');
+        return;
+      }
+      
+      // Show loading
+      document.getElementById('workflow-loading').classList.remove('hidden');
+      document.getElementById('workflow-result').classList.add('hidden');
+      
+      try {
+        const response = await fetch('/api/workflow', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            companyName,
+            website: document.getElementById('company-website').value.trim(),
+            linkedInUrl: document.getElementById('company-linkedin').value.trim(),
+            emailOptions: {
+              includeSubjects: document.getElementById('include-subjects').checked,
+              maxEmailsPerContact: parseInt(document.getElementById('max-emails').value, 10),
+              personalize: document.getElementById('personalize').checked
+            }
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Show result
+          document.getElementById('workflow-message').textContent = data.message;
+          document.getElementById('research-download').href = data.researchUrl;
+          document.getElementById('brief-download').href = data.briefUrl;
+          document.getElementById('csv-download').href = data.csvUrl;
+          document.getElementById('workflow-result').classList.remove('hidden');
+        } else {
+          alert(`Error: ${data.error}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      } finally {
+        document.getElementById('workflow-loading').classList.add('hidden');
+      }
+    });
+    
+    // Research Only
+    document.getElementById('start-research').addEventListener('click', async () => {
+      const companyName = document.getElementById('research-company-name').value.trim();
+      if (!companyName) {
+        alert('Company name is required');
+        return;
+      }
+      
+      // Show loading
+      document.getElementById('research-loading').classList.remove('hidden');
+      document.getElementById('research-result').classList.add('hidden');
+      
+      try {
+        const response = await fetch('/api/research', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            companyName,
+            website: document.getElementById('research-company-website').value.trim(),
+            linkedInUrl: document.getElementById('research-company-linkedin').value.trim()
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Show result
+          document.getElementById('research-message').textContent = data.message;
+          document.getElementById('research-only-download').href = data.downloadUrl;
+          document.getElementById('research-result').classList.remove('hidden');
+        } else {
+          alert(`Error: ${data.error}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      } finally {
+        document.getElementById('research-loading').classList.add('hidden');
+      }
+    });
+    
+    // Parse Brief
+    document.getElementById('parse-brief').addEventListener('click', async () => {
+      const briefText = document.getElementById('brief-text').value.trim();
+      if (!briefText) {
+        alert('Brief text is required');
+        return;
+      }
+      
+      // Show loading
+      document.getElementById('parse-loading').classList.remove('hidden');
+      document.getElementById('parse-result').classList.add('hidden');
+      
+      try {
+        const response = await fetch('/api/parse', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            brief: briefText
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Show result
+          const accountBrief = data.accountBrief;
+          let html = `<h3>${accountBrief.companyName}</h3>`;
+          
+          // Display contacts with persona tags
+          html += '<h4>Priority Contacts</h4>';
+          html += '<ul>';
+          accountBrief.priorityContacts.forEach(contact => {
+            const personaClass = `persona-${contact.persona.split(' ')[0].toLowerCase()}`;
+            html += `<li>${contact.name}, ${contact.title} <span class="persona-tag ${personaClass}">${contact.persona}</span></li>`;
+          });
+          html += '</ul>';
+          
+          // Display pain points
+          html += '<h4>Pain Points</h4>';
+          html += '<ul>';
+          accountBrief.painPoints.forEach(point => {
+            html += `<li>${point}</li>`;
+          });
+          html += '</ul>';
+          
+          document.getElementById('brief-data').innerHTML = html;
+          document.getElementById('parse-result').classList.remove('hidden');
+        } else {
+          alert(`Error: ${data.error}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      } finally {
+        document.getElementById('parse-loading').classList.add('hidden');
+      }
+    });
+    
+    // Generate Emails
+    document.getElementById('generate-emails').addEventListener('click', async () => {
+      const briefText = document.getElementById('emails-brief-text').value.trim();
+      if (!briefText) {
+        alert('Brief text is required');
+        return;
+      }
+      
+      // Show loading
+      document.getElementById('emails-loading').classList.remove('hidden');
+      document.getElementById('emails-result').classList.add('hidden');
+      
+      try {
+        // First parse the brief
+        const parseResponse = await fetch('/api/parse', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            brief: briefText
+          })
+        });
+        
+        const parseData = await parseResponse.json();
+        
+        if (!parseResponse.ok) {
+          alert(`Error parsing brief: ${parseData.error}`);
+          return;
+        }
+        
+        // Then generate emails
+        const emailsResponse = await fetch('/api/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            accountBrief: parseData.accountBrief,
+            options: {
+              includeSubjects: document.getElementById('emails-include-subjects').checked,
+              maxEmailsPerContact: parseInt(document.getElementById('emails-max-emails').value, 10),
+              personalize: document.getElementById('emails-personalize').checked
+            }
+          })
+        });
+        
+        const emailsData = await emailsResponse.json();
+        
+        if (emailsResponse.ok) {
+          // Show result
+          document.getElementById('emails-message').textContent = emailsData.message;
+          document.getElementById('emails-download').href = emailsData.downloadUrl;
+          document.getElementById('emails-result').classList.remove('hidden');
+        } else {
+          alert(`Error generating emails: ${emailsData.error}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      } finally {
+        document.getElementById('emails-loading').classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
